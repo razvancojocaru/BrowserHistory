@@ -1,0 +1,27 @@
+Cojocaru Mihail-Razvan 313CA
+
+Programul realizat simuleaza gestiunea istoricului pastrata de un browser.
+Pentru implementare am folosit o structura de tip deque, cu o implementare hibrida, printr-o lista ce contine in fiecare nod cate un vector cu n elemente(n citit de la tastatura) si un int, care retine numarul de elemente din fiecare vector.
+
+Main-ul contine un pointer la deque, folosit ca pointer pentru a putea fi modificat de functiile programului. Numarul maxim de zile este variabila globala, modificata doar de functia set_max_days, dar folosita de aproape toate functiile, iar curentday este variabila locala, definita in main, primita ca parametru pentru fiecare functie care are nevoie de ziua curenta.
+Fiecare comanda acceptata primita de la tastatura are asociata o functie cu acelasi nume. Citirea parametrilor pentru comenzile date este realizata in interiorul functiei corespunzatoare comenzii.
+Main-ul este, in esenta, relativ simplu, usor de inteles, de aceea in acest readme voi insista pe implementarea deque-ului.
+
+Structura de tip deque este implementata in header-ul "deque.h", care foloseste lista liniara dublu inlantuita din fisierul "list.h".
+In list.h avem o structura folosita pentru nodurile listei, care contine, pe langa pointerii la elementele invecinate, un vector si un int folosit pentru a retine numarul de elemente din vector. In rest, este o lista dublu inlantuita clasica, cu mentiunea ca are o metoda pentru stergerea elementelor interioare din lista.
+Structura deque foloseste o astfel de lista(notata l), un int Size, care retine numarul de elemente din deque si un int n, primit ca parametru in constructor, care reprezinta numarul maxim de elemente al fiecarui vector dintr-un nod.
+Initial, deque contine un singur nod cu vectorul gol, alocat in constructor.
+
+Mentionez ca deque este optimizat pentru push_front, pop_front, pentru a realiza mai rapid comenzi de tipul ACCESS_PAGE.
+Astfel, la apelarea push_front, elementul este adaugat ca ultim element al vectorului din ultimul nod, sau daca vectorul este plin, se adauga un nou nod in lista si elementul este pus la inceputul vectorului din nodul nou creat.
+In schimp, pentru push_back, elementul este adaugat la inceputul vectorului din ultimul nod, operatie realizata prin mutarea tuturor elementelor din vectorul respectiv cu o pozitie si inserarea elementului pe prima pozitie a vectorului. Mutarea elementelor este o operatie costisitoare, dar am implementat astfel pentru a simplifica operatia de stergere a elementelor din interiorul structurii.
+In acelasi mod, operatia de pop_front se rezuma doar la stergerea elementului de pe ultima pozitie din vectorul primului nod(de fapt, doar micsoram size cu 1).
+Operatia de pop_back presupune mutarea cu o pozitie spre stanga a tuturor elementelor din ultimul vector(astfel se suprascrie primul element).
+
+Din cauza implementarii alese, indicii deque-ului sunt invers fata de indicii vectorilor. Astfel, indicele 0 reprezinta elementul de pe ultima pozitie valida din primul vector, in timp ce elementul cu indicele final (size-1), reprezinta elementul de pe prima pozitie a vectorului din ultimul nod.
+
+Functia at returneaza elementul cu indexul specificat, indexul fiind calculat dupa principiul mentionat inainte.
+
+Functia de erase muta toate elementele din dreapta elementului ce urmeaza a fi sters cu o pozitie mai in stanga, suprascriind elementul respectiv. Astfel, elementele sunt intotdeauna aliniate la dreapta, in fiecare vector (v[0] nu este niciodata invalid).
+
+Pe langa push, pop, at si erase, avem functii de front si back, pentru returnarea primului si ultimului element, functia empty, care verifica daca deque este gol si o functie getsize, folosita pentru a afla numarul de elemente din deque.
